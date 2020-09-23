@@ -1,54 +1,68 @@
 'use strict';
 
-const CLOUD_WIDTH = 420;
-const CLOUD_HEIGHT = 270;
+const CloudParameters = {
+  WIDTH: 420,
+  HEIGHT: 270,
+  X: 100,
+  Y: 10,
+  GAP: 10,
+};
 
-const CLOUD_X = 100;
-const CLOUD_Y = 10;
-const GAP = 10;
-const FONT_GAP = 30;
-const FONT_SIZE = 16;
+const FontParameters = {
+  GAP: 30,
+  SIZE: 16,
+};
 
-const COLUMN_WIDTH = 40;
-const COLUMN_MAX_HEIGHT = 150;
-const COLUMN_GAP = 50;
+const ColumnParameters = {
+  WIDTH: 40,
+  MAX_HEIGHT: 150,
+  GAP: 50,
+};
 
-const renderRect = function (ctx, color, x, y, width, height) {
+const PLAYER_NAME = `Вы`;
+
+const renderCloud = function (ctx, color, x, y) {
   ctx.fillStyle = color;
-  ctx.fillRect(x, y, width, height);
+  ctx.fillRect(x, y, CloudParameters.WIDTH, CloudParameters.HEIGHT);
+};
+
+const renderText = function (ctx) {
+  ctx.fillStyle = `#000`;
+  ctx.font = `${FontParameters.SIZE}px PT Mono`;
+  ctx.fillText(`Ура, вы победили!`, CloudParameters.X + CloudParameters.GAP * 2, CloudParameters.Y + FontParameters.GAP);
+  ctx.fillText(`Список результатов:`, CloudParameters.X + CloudParameters.GAP * 2, CloudParameters.Y + FontParameters.GAP + FontParameters.SIZE);
+
+};
+
+const renderHistogram = function (ctx, names, times) {
+  const maxElement = Math.max.apply(null, times);
+
+  const colors = names.map(function (name) {
+    let randomColor = `hsl(240, ${Math.round(Math.random() * 100)}%, 50%)`;
+
+    return name === PLAYER_NAME ? `rgb(250, 0, 0)` : randomColor;
+  });
+
+  let columnX = CloudParameters.X + CloudParameters.GAP + ColumnParameters.WIDTH;
+
+  for (let i = 0; i < times.length; i++) {
+    let columnHeight = times[i] * ColumnParameters.MAX_HEIGHT / maxElement;
+    let columnY = CloudParameters.GAP + CloudParameters.HEIGHT - ColumnParameters.WIDTH - columnHeight;
+
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(columnX, columnY, ColumnParameters.WIDTH, columnHeight);
+
+    ctx.fillStyle = `#000`;
+    ctx.fillText(names[i], columnX, columnY + columnHeight + FontParameters.SIZE);
+    ctx.fillText(Math.round(times[i]), columnX, columnY - CloudParameters.GAP);
+
+    columnX += ColumnParameters.WIDTH + ColumnParameters.GAP;
+  }
 };
 
 window.renderStatistics = function (ctx, names, times) {
-  renderRect(ctx, `rgba(0, 0, 0, 0.7)`, CLOUD_X + GAP, CLOUD_Y + GAP, CLOUD_WIDTH, CLOUD_HEIGHT);
-  renderRect(ctx, `#fff`, CLOUD_X, CLOUD_Y, CLOUD_WIDTH, CLOUD_HEIGHT);
-
-  ctx.fillStyle = `#000`;
-  ctx.font = `${FONT_SIZE}px PT Mono`;
-  ctx.fillText(`Ура, вы победили!`, CLOUD_X + GAP * 2, CLOUD_Y + FONT_GAP);
-  ctx.fillText(`Список результатов:`, CLOUD_X + GAP * 2, CLOUD_Y + FONT_GAP + FONT_SIZE);
-  // Гистограмма
-  const MAX_ELEMENT = times.reduce(function (maxTime = times[0], time) {
-    return time > maxTime ? time : maxTime;
-  });
-
-  const colors = names.map(function (name) {
-    let color = `hsl(240, ${Math.round(Math.random() * 100)}%, 50%)`;
-
-    return name === `Вы` ? `rgb(250, 0, 0)` : color;
-  });
-
-  let COLUMN_X = CLOUD_X + GAP + COLUMN_WIDTH;
-
-  for (let i = 0; i < times.length; i++) {
-    let columnHeight = times[i] * COLUMN_MAX_HEIGHT / MAX_ELEMENT;
-    let COLUMN_Y = GAP + CLOUD_HEIGHT - COLUMN_WIDTH - columnHeight;
-    renderRect(ctx, colors[i], COLUMN_X, COLUMN_Y, COLUMN_WIDTH, columnHeight);
-
-    // Текст гистограммы
-    ctx.fillStyle = `#000`;
-    ctx.fillText(names[i], COLUMN_X, GAP + CLOUD_HEIGHT - COLUMN_WIDTH + FONT_SIZE);
-    ctx.fillText(Math.round(times[i]), COLUMN_X, COLUMN_Y - GAP);
-
-    COLUMN_X += COLUMN_WIDTH + COLUMN_GAP;
-  }
+  renderCloud(ctx, `rgba(0, 0, 0, 0.7)`, CloudParameters.X + CloudParameters.GAP, CloudParameters.Y + CloudParameters.GAP);
+  renderCloud(ctx, `#fff`, CloudParameters.X, CloudParameters.Y);
+  renderText(ctx);
+  renderHistogram(ctx, names, times);
 };
