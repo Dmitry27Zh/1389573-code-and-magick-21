@@ -1,5 +1,9 @@
 'use strict';
 
+const PLAYER_NAME = `Вы`;
+
+const MESSAGE = `Ура, вы победили!\nСписок результатов:`;
+
 const CloudParameters = {
   WIDTH: 420,
   HEIGHT: 270,
@@ -19,34 +23,63 @@ const ColumnParameters = {
   GAP: 50,
 };
 
-const PLAYER_NAME = `Вы`;
+const getRandomColor = function () {
+  return `hsl(240, ${Math.round(Math.random() * 100)}%, 50%)`;
+};
+
+const getMaxElement = function (array) {
+  return Math.max.apply(null, array);
+};
 
 const renderCloud = function (ctx, color, x, y) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CloudParameters.WIDTH, CloudParameters.HEIGHT);
 };
 
-const renderText = function (ctx) {
+const findLineBreaks = function (text) {
+  let startPos = 0;
+  let positions = [];
+
+  while (text) {
+    let foundPos = text.indexOf(`\n`, startPos);
+
+    if (foundPos === -1) {
+      break;
+    }
+
+    positions.push(foundPos);
+    startPos = foundPos + 1;
+  }
+
+  return positions;
+};
+
+const renderText = function (ctx, text) {
   ctx.fillStyle = `#000`;
   ctx.font = `${FontParameters.SIZE}px PT Mono`;
-  ctx.fillText(`Ура, вы победили!`, CloudParameters.X + CloudParameters.GAP * 2, CloudParameters.Y + FontParameters.GAP);
-  ctx.fillText(`Список результатов:`, CloudParameters.X + CloudParameters.GAP * 2, CloudParameters.Y + FontParameters.GAP + FontParameters.SIZE);
 
+  const lineBreaks = findLineBreaks(text);
+  let textX = CloudParameters.X + CloudParameters.GAP * 2;
+  let textY = CloudParameters.Y + FontParameters.GAP;
+
+  for (let i = 0; i < lineBreaks.length + 1; i++) {
+    let textLineStart = i === 0 ? 0 : lineBreaks[i - 1] + 1;
+    let textLineEnd = lineBreaks[i];
+    let textLine = text.slice(textLineStart, textLineEnd);
+    ctx.fillText(textLine, textX, textY);
+    textY += FontParameters.SIZE;
+  }
 };
 
 const renderHistogram = function (ctx, names, times) {
-  const maxElement = Math.max.apply(null, times);
-
   const colors = names.map(function (name) {
-    let randomColor = `hsl(240, ${Math.round(Math.random() * 100)}%, 50%)`;
-
-    return name === PLAYER_NAME ? `rgb(250, 0, 0)` : randomColor;
+    return name === PLAYER_NAME ? `rgb(250, 0, 0)` : getRandomColor();
   });
 
   let columnX = CloudParameters.X + CloudParameters.GAP + ColumnParameters.WIDTH;
 
   for (let i = 0; i < times.length; i++) {
-    let columnHeight = times[i] * ColumnParameters.MAX_HEIGHT / maxElement;
+    let columnHeight = times[i] * ColumnParameters.MAX_HEIGHT / getMaxElement(times);
     let columnY = CloudParameters.GAP + CloudParameters.HEIGHT - ColumnParameters.WIDTH - columnHeight;
 
     ctx.fillStyle = colors[i];
@@ -63,6 +96,6 @@ const renderHistogram = function (ctx, names, times) {
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, `rgba(0, 0, 0, 0.7)`, CloudParameters.X + CloudParameters.GAP, CloudParameters.Y + CloudParameters.GAP);
   renderCloud(ctx, `#fff`, CloudParameters.X, CloudParameters.Y);
-  renderText(ctx);
+  renderText(ctx, MESSAGE);
   renderHistogram(ctx, names, times);
 };
