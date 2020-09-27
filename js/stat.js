@@ -15,6 +15,7 @@ const CloudParameters = {
 const FontParameters = {
   GAP: 30,
   SIZE: 16,
+  FONT_FAMILY: `PT Mono`,
 };
 
 const ColumnParameters = {
@@ -31,41 +32,23 @@ const getMaxElement = function (array) {
   return Math.max.apply(null, array);
 };
 
-const renderCloud = function (ctx, color, x, y) {
-  ctx.fillStyle = color;
+const renderCloud = function (ctx, x, y) {
+  ctx.fillStyle = `rgba(0, 0, 0, 0.7)`;
+  ctx.fillRect(x + CloudParameters.GAP, y + CloudParameters.GAP, CloudParameters.WIDTH, CloudParameters.HEIGHT);
+  ctx.fillStyle = `#fff`;
   ctx.fillRect(x, y, CloudParameters.WIDTH, CloudParameters.HEIGHT);
-};
-
-const findLineBreaks = function (text) {
-  let startPos = 0;
-  let positions = [];
-
-  while (text) {
-    let foundPos = text.indexOf(`\n`, startPos);
-
-    if (foundPos === -1) {
-      break;
-    }
-
-    positions.push(foundPos);
-    startPos = foundPos + 1;
-  }
-
-  return positions;
 };
 
 const renderText = function (ctx, text) {
   ctx.fillStyle = `#000`;
-  ctx.font = `${FontParameters.SIZE}px PT Mono`;
+  ctx.font = `${FontParameters.SIZE}px ${FontParameters.FONT_FAMILY}`;
 
-  const lineBreaks = findLineBreaks(text);
+  const textLines = text.split(`\n`);
   let textX = CloudParameters.X + CloudParameters.GAP * 2;
   let textY = CloudParameters.Y + FontParameters.GAP;
 
-  for (let i = 0; i < lineBreaks.length + 1; i++) {
-    let textLineStart = i === 0 ? 0 : lineBreaks[i - 1] + 1;
-    let textLineEnd = lineBreaks[i];
-    let textLine = text.slice(textLineStart, textLineEnd);
+  for (let i = 0; i < textLines.length; i++) {
+    let textLine = textLines[i];
     ctx.fillText(textLine, textX, textY);
     textY += FontParameters.SIZE;
   }
@@ -94,8 +77,7 @@ const renderHistogram = function (ctx, names, times) {
 };
 
 window.renderStatistics = function (ctx, names, times) {
-  renderCloud(ctx, `rgba(0, 0, 0, 0.7)`, CloudParameters.X + CloudParameters.GAP, CloudParameters.Y + CloudParameters.GAP);
-  renderCloud(ctx, `#fff`, CloudParameters.X, CloudParameters.Y);
+  renderCloud(ctx, CloudParameters.X, CloudParameters.Y);
   renderText(ctx, MESSAGE);
   renderHistogram(ctx, names, times);
 };
