@@ -5,15 +5,16 @@ const SURNAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вал
 const COATCOLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
 const EYESCOLORS = [`black`, `red`, `blue`, `yellow`, `green`];
 const WIZARDS_QUANTITY = 4;
+const wizardTemplate = document.querySelector(`#similar-wizard-template`).content.querySelector(`.setup-similar-item`);
 
 const getRandomItem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
 
 const generateWizards = function () {
-  let wizards = [];
+  const wizards = [];
   for (let i = 1; i <= WIZARDS_QUANTITY; i++) {
-    let wizard = {};
+    const wizard = {};
     wizard.name = `${getRandomItem(NAMES)} ${getRandomItem(SURNAMES)}`;
     wizard.coatColor = `${getRandomItem(COATCOLORS)}`;
     wizard.eyeColor = `${getRandomItem(EYESCOLORS)}`;
@@ -23,7 +24,6 @@ const generateWizards = function () {
 };
 
 const createWizardElement = function (wizard) {
-  const wizardTemplate = document.querySelector(`#similar-wizard-template`).content.querySelector(`.setup-similar-item`);
   const wizardElement = wizardTemplate.cloneNode(true);
   wizardElement.querySelector(`.setup-similar-label`).textContent = wizard.name;
   wizardElement.querySelector(`.wizard-coat`).style.fill = wizard.coatColor;
@@ -33,7 +33,7 @@ const createWizardElement = function (wizard) {
 
 const addWizardsElements = function () {
   const wizards = generateWizards();
-  let fragment = document.createDocumentFragment();
+  const fragment = document.createDocumentFragment();
   for (let i = 0; i < wizards.length; i++) {
     fragment.appendChild(createWizardElement(wizards[i]));
   }
