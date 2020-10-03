@@ -6,6 +6,7 @@ const COATCOLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 16
 const EYESCOLORS = [`black`, `red`, `blue`, `yellow`, `green`];
 const WIZARDS_QUANTITY = 4;
 const wizardTemplate = document.querySelector(`#similar-wizard-template`).content.querySelector(`.setup-similar-item`);
+const setup = document.querySelector(`.setup`);
 
 const getRandomItem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -37,18 +38,47 @@ const addWizardsElements = function () {
   for (let i = 0; i < wizards.length; i++) {
     fragment.appendChild(createWizardElement(wizards[i]));
   }
-  const similarList = document.querySelector(`.setup-similar-list`);
+  const similarList = setup.querySelector(`.setup-similar-list`);
   similarList.appendChild(fragment);
 };
 
-const openSetup = function () {
-  const setup = document.querySelector(`.setup`);
-  const setupSimilar = setup.querySelector(`.setup-similar`);
-  setup.classList.remove(`hidden`);
-  setupSimilar.classList.remove(`hidden`);
-  addWizardsElements();
+
+const setupOpen = document.querySelector(`.setup-open`);
+const setupClose = setup.querySelector(`.setup-close`);
+
+const popupEscPressHandler = function (evt) {
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    closePopup();
+  }
 };
 
-openSetup();
+const openPopup = function () {
+  setup.classList.remove(`hidden`);
+  document.addEventListener(`keydown`, popupEscPressHandler);
+};
+
+const closePopup = function () {
+  setup.classList.add(`hidden`);
+  document.removeEventListener(`keydown`, popupEscPressHandler);
+};
+
+setupOpen.addEventListener(`click`, function () {
+  openPopup();
+  setupClose.addEventListener(`click`, function () {
+    closePopup();
+  });
+});
+
+setupOpen.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    openPopup();
+  }
+  setupClose.addEventListener(`keydown`, function (evt) {
+    if (evt.key === `Enter`) {
+      closePopup();
+    }
+  });
+});
 
 
