@@ -69,6 +69,7 @@
 <div class="overlay setup hidden">
   <form class="setup-wizard-form"
         method="post"
+        action="https://javascript.pages.academy/code-and-magick"
         enctype="multipart/form-data"
         autocomplete="off">
 
@@ -76,12 +77,12 @@
       <div class="setup-user">
         <div class="upload">
           <img class="setup-user-pic" src="img/user-1.jpg"/>
-          <input type="file" name="avatar">
+          <input type="file" name="avatar" accept="image/png, image/jpeg">
         </div>
         <label>
-          <input type="text" name="username"
+          <input type="text" name="username" minlength="2"
                  maxlength="25" required
-                 class="setup-user-name" value="Синий Пендальф"/>
+                 class="setup-user-name" value="Синий Пендальф" required/>
         </label>
       </div>
 
@@ -154,7 +155,7 @@
         <div class="setup-similar-list"><!--Список похожих персонажей--></div>
       </div>
 
-      <button class="button setup-submit">Сохранить</button>
+      <button class="button setup-submit" type="submit">Сохранить</button>
     </div>
   </form>
 </div>
