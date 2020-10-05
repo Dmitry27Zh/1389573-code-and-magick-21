@@ -5,10 +5,10 @@ const SURNAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вал
 const COAT_COLORS = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
 const EYES_COLORS = [`black`, `red`, `blue`, `yellow`, `green`];
 const FIREBALL_COLORS = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`];
+const KEY_CLICK = `Enter`;
+const KEY_CLOSE = `Escape`;
 
 const WIZARDS_QUANTITY = 4;
-const MIN_NAME_LENGTH = 2;
-const MAX_NAME_LENGTH = 25;
 const wizardTemplate = document.querySelector(`#similar-wizard-template`).content.querySelector(`.setup-similar-item`);
 const setup = document.querySelector(`.setup`);
 
@@ -60,41 +60,55 @@ const fireball = setup.querySelector(`.setup-fireball-wrap`);
 const fireballColor = setup.querySelector(`input[name="fireball-color"]`);
 
 const popupEscPressHandler = function (evt) {
-  if (evt.key === `Escape`) {
+  if (evt.key === KEY_CLOSE) {
     evt.preventDefault();
     closePopup();
   }
 };
 
 const userNameInputHandler = function () {
+  const minLength = userNameInput.getAttribute(`minlength`);
+  const maxLength = userNameInput.getAttribute(`maxlength`);
   const valueLength = userNameInput.value.length;
-  if (valueLength < MIN_NAME_LENGTH) {
-    userNameInput.setCustomValidity(`Еще ${MIN_NAME_LENGTH - valueLength} симв.`);
-  } else if (valueLength > MAX_NAME_LENGTH) {
-    userNameInput.setCustomValidity(`Удалите лишние ${valueLength - MAX_NAME_LENGTH} симв.`);
+  if (valueLength < minLength) {
+    userNameInput.setCustomValidity(`Еще ${minLength - valueLength} симв.`);
+  } else if (valueLength > maxLength) {
+    userNameInput.setCustomValidity(`Удалите лишние ${valueLength - maxLength} симв.`);
   } else {
     userNameInput.setCustomValidity(``);
   }
   userNameInput.reportValidity();
 };
 
+const getNewColor = function (array, currentColor) {
+  let newColor = getRandomItem(array);
+  while (newColor === currentColor) {
+    newColor = getRandomItem(array);
+  }
+  return newColor;
+};
+
 const wizardCoatClickHandler = function () {
-  coatColor.value = getRandomItem(COAT_COLORS);
+  coatColor.value = getNewColor(COAT_COLORS, wizardCoat.style.fill);
   wizardCoat.style.fill = coatColor.value;
 };
 
 const wizardEyesClickHandler = function () {
-  eyesColor.value = getRandomItem(EYES_COLORS);
+  eyesColor.value = getNewColor(EYES_COLORS, wizardEyes.style.fill);
   wizardEyes.style.fill = eyesColor.value;
 };
 
 const fireballClickHandler = function () {
-  fireballColor.value = getRandomItem(FIREBALL_COLORS);
+  fireballColor.value = getNewColor(FIREBALL_COLORS, fireball.style.backgroundColor);
   fireball.style.backgroundColor = fireballColor.value;
 };
 
 const openPopup = function () {
   setup.classList.remove(`hidden`);
+  setupClose.addEventListener(`click`, setupCloseClickHandler);
+  setupClose.addEventListener(`keydown`, setupCloseKeydownHandler);
+  setupOpen.removeEventListener(`click`, setupOpenClickHandler);
+  setupOpen.removeEventListener(`keydown`, setupOpenKeydownHandler);
   document.addEventListener(`keydown`, popupEscPressHandler);
   userNameInput.addEventListener(`input`, userNameInputHandler);
   wizardCoat.addEventListener(`click`, wizardCoatClickHandler);
@@ -104,6 +118,10 @@ const openPopup = function () {
 
 const closePopup = function () {
   setup.classList.add(`hidden`);
+  setupClose.removeEventListener(`click`, setupCloseClickHandler);
+  setupClose.removeEventListener(`keydown`, setupCloseKeydownHandler);
+  setupOpen.addEventListener(`click`, setupOpenClickHandler);
+  setupOpen.addEventListener(`keydown`, setupOpenKeydownHandler);
   document.removeEventListener(`keydown`, popupEscPressHandler);
   userNameInput.removeEventListener(`input`, userNameInputHandler);
   wizardCoat.removeEventListener(`click`, wizardCoatClickHandler);
@@ -111,21 +129,27 @@ const closePopup = function () {
   fireball.removeEventListener(`click`, fireballClickHandler);
 };
 
-setupOpen.addEventListener(`click`, function () {
+const setupOpenClickHandler = function () {
   openPopup();
-  setupClose.addEventListener(`click`, function () {
-    closePopup();
-  });
-});
+};
 
-setupOpen.addEventListener(`keydown`, function (evt) {
+const setupOpenKeydownHandler = function (evt) {
   if (evt.key === `Enter`) {
     openPopup();
   }
-  setupClose.addEventListener(`keydown`, function () {
-    if (evt.key === `Enter`) {
-      closePopup();
-    }
-  });
-});
+};
+
+const setupCloseClickHandler = function () {
+  closePopup();
+};
+
+const setupCloseKeydownHandler = function (evt) {
+  if (evt.key === KEY_CLICK) {
+    closePopup();
+  }
+};
+
+setupOpen.addEventListener(`click`, setupOpenClickHandler);
+setupOpen.addEventListener(`keydown`, setupOpenKeydownHandler);
+
 
