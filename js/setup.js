@@ -89,17 +89,17 @@ const getNewColor = function (array, currentColor) {
 };
 
 const wizardCoatClickHandler = function () {
-  coatColor.value = getNewColor(COAT_COLORS, wizardCoat.style.fill);
+  coatColor.value = getNewColor(COAT_COLORS, coatColor.value);
   wizardCoat.style.fill = coatColor.value;
 };
 
 const wizardEyesClickHandler = function () {
-  eyesColor.value = getNewColor(EYES_COLORS, wizardEyes.style.fill);
+  eyesColor.value = getNewColor(EYES_COLORS, eyesColor.value);
   wizardEyes.style.fill = eyesColor.value;
 };
 
 const fireballClickHandler = function () {
-  fireballColor.value = getNewColor(FIREBALL_COLORS, fireball.style.backgroundColor);
+  fireballColor.value = getNewColor(FIREBALL_COLORS, fireballColor.value);
   fireball.style.backgroundColor = fireballColor.value;
 };
 
