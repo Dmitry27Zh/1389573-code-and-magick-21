@@ -19,6 +19,7 @@
     window.colorize.wizardCoatEventAdd();
     window.colorize.wizardEyesEventAdd();
     window.colorize.fireballEventAdd();
+    window.move.moveDialogOn();
   };
 
   const closePopup = function () {
@@ -32,6 +33,7 @@
     window.colorize.wizardCoatEventRemove();
     window.colorize.wizardEyesEventRemove();
     window.colorize.fireballEventRemove();
+    window.move.moveDialogOff();
   };
 
   const setupOpenClickHandler = function () {
