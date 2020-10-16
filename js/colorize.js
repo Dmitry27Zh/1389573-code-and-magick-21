@@ -1,12 +1,17 @@
 'use strict';
 
 (function () {
-  const wizardCoat = window.setup.setupElement.querySelector(`.wizard-coat`);
-  const coatColor = window.setup.setupElement.querySelector(`input[name="coat-color"]`);
-  const wizardEyes = window.setup.setupElement.querySelector(`.wizard-eyes`);
-  const eyesColor = window.setup.setupElement.querySelector(`input[name="eyes-color"]`);
-  const fireball = window.setup.setupElement.querySelector(`.setup-fireball-wrap`);
-  const fireballColor = window.setup.setupElement.querySelector(`input[name="fireball-color"]`);
+  const COAT_COLORS = window.data.COAT_COLORS;
+  const EYES_COLORS = window.data.EYES_COLORS;
+  const FIREBALL_COLORS = window.data.FIREBALL_COLORS;
+  const setup = window.setup.element;
+  const wizardCoat = setup.querySelector(`.wizard-coat`);
+  const coatColor = setup.querySelector(`input[name="coat-color"]`);
+  const wizardEyes = setup.querySelector(`.wizard-eyes`);
+  const eyesColor = setup.querySelector(`input[name="eyes-color"]`);
+  const fireball = setup.querySelector(`.setup-fireball-wrap`);
+  const fireballColor = setup.querySelector(`input[name="fireball-color"]`);
+
   const getNewColor = function (array, currentColor) {
     let newColor = window.utils.getRandomItem(array);
     while (newColor === currentColor) {
@@ -24,15 +29,15 @@
   };
 
   const colorizeWizardCoat = function () {
-    colorize(window.setup.COAT_COLORS, coatColor, wizardCoat);
+    colorize(COAT_COLORS, coatColor, wizardCoat);
   };
 
   const colorizeWizardEyes = function () {
-    colorize(window.setup.EYES_COLORS, eyesColor, wizardEyes);
+    colorize(EYES_COLORS, eyesColor, wizardEyes);
   };
 
   const colorizeFireball = function () {
-    colorize(window.setup.FIREBALL_COLORS, fireballColor, fireball);
+    colorize(FIREBALL_COLORS, fireballColor, fireball);
   };
 
   const wizardCoatEventAdd = function () {

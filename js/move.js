@@ -1,7 +1,8 @@
 'use strict';
 
 (function () {
-  const dialogHandle = window.setup.setupElement.querySelector(`.upload`);
+  const setup = window.setup.element;
+  const dialogHandle = setup.querySelector(`.upload`);
 
   const moveDialog = function (evt) {
     evt.preventDefault();
@@ -25,8 +26,8 @@
         x: moveEvt.clientX,
         y: moveEvt.clientY,
       };
-      window.setup.setupElement.style.left = `${window.setup.setupElement.offsetLeft - shift.x}px`;
-      window.setup.setupElement.style.top = `${window.setup.setupElement.offsetTop - shift.y}px`;
+      setup.style.left = `${setup.offsetLeft - shift.x}px`;
+      setup.style.top = `${setup.offsetTop - shift.y}px`;
     };
     const onMouseUp = function (upEvt) {
       upEvt.preventDefault();
@@ -50,7 +51,7 @@
   };
   const moveDialogOff = function () {
     dialogHandle.removeEventListener(`mousedown`, moveDialog);
-    window.setup.setupElement.removeAttribute(`style`);
+    setup.removeAttribute(`style`);
   };
   window.move = {
     moveDialogOn,

@@ -1,39 +1,32 @@
 'use strict';
 
 (function () {
+  const setup = window.setup.element;
   const setupOpen = document.querySelector(`.setup-open`);
-  const setupClose = window.setup.setupElement.querySelector(`.setup-close`);
+  const setupClose = setup.querySelector(`.setup-close`);
 
   const popupEscPressHandler = function (evt) {
     window.utils.isEscEvent(evt, closePopup);
   };
 
   const openPopup = function () {
-    window.setup.setupElement.classList.remove(`hidden`);
+    window.setup.element.classList.remove(`hidden`);
     setupClose.addEventListener(`click`, setupCloseClickHandler);
     setupClose.addEventListener(`keydown`, setupCloseKeydownHandler);
     setupOpen.removeEventListener(`click`, setupOpenClickHandler);
     setupOpen.removeEventListener(`keydown`, setupOpenKeydownHandler);
     document.addEventListener(`keydown`, popupEscPressHandler);
-    window.setupValidation.userNameInputCheckOn();
-    window.colorize.wizardCoatEventAdd();
-    window.colorize.wizardEyesEventAdd();
-    window.colorize.fireballEventAdd();
-    window.move.moveDialogOn();
+    window.setup.activate();
   };
 
   const closePopup = function () {
-    window.setup.setupElement.classList.add(`hidden`);
+    setup.classList.add(`hidden`);
     setupClose.removeEventListener(`click`, setupCloseClickHandler);
     setupClose.removeEventListener(`keydown`, setupCloseKeydownHandler);
     setupOpen.addEventListener(`click`, setupOpenClickHandler);
     setupOpen.addEventListener(`keydown`, setupOpenKeydownHandler);
     document.removeEventListener(`keydown`, popupEscPressHandler);
-    window.setupValidation.userNameInputCheckOff();
-    window.colorize.wizardCoatEventRemove();
-    window.colorize.wizardEyesEventRemove();
-    window.colorize.fireballEventRemove();
-    window.move.moveDialogOff();
+    window.setup.deactivate();
   };
 
   const setupOpenClickHandler = function () {
