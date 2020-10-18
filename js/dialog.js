@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  const setup = window.setup.element;
+  const dialog = document.querySelector(`.setup`);
   const setupOpen = document.querySelector(`.setup-open`);
-  const setupClose = setup.querySelector(`.setup-close`);
+  const setupClose = dialog.querySelector(`.setup-close`);
 
   const popupEscPressHandler = function (evt) {
     window.utils.isEscEvent(evt, closePopup);
@@ -20,7 +20,7 @@
   };
 
   const closePopup = function () {
-    setup.classList.add(`hidden`);
+    dialog.classList.add(`hidden`);
     setupClose.removeEventListener(`click`, setupCloseClickHandler);
     setupClose.removeEventListener(`keydown`, setupCloseKeydownHandler);
     setupOpen.addEventListener(`click`, setupOpenClickHandler);
@@ -47,4 +47,9 @@
 
   setupOpen.addEventListener(`click`, setupOpenClickHandler);
   setupOpen.addEventListener(`keydown`, setupOpenKeydownHandler);
+
+  window.dialog = {
+    element: dialog,
+    closePopup,
+  };
 })();
