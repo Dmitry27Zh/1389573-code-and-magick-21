@@ -4,7 +4,7 @@
   const COAT_COLORS = window.data.COAT_COLORS;
   const EYES_COLORS = window.data.EYES_COLORS;
   const FIREBALL_COLORS = window.data.FIREBALL_COLORS;
-  const setup = window.setup.element;
+  const setup = window.dialog.element;
   const wizardCoat = setup.querySelector(`.wizard-coat`);
   const coatColor = setup.querySelector(`input[name="coat-color"]`);
   const wizardEyes = setup.querySelector(`.wizard-eyes`);
@@ -26,14 +26,22 @@
     } else {
       element.style.fill = currentColorElement.value;
     }
+    return currentColorElement.value;
+  };
+
+  let wizard = {
+    onCoatChange() {},
+    onEyesChange() {},
   };
 
   const colorizeWizardCoat = function () {
-    colorize(COAT_COLORS, coatColor, wizardCoat);
+    const newColor = colorize(COAT_COLORS, coatColor, wizardCoat);
+    wizard.onCoatChange(newColor);
   };
 
   const colorizeWizardEyes = function () {
-    colorize(EYES_COLORS, eyesColor, wizardEyes);
+    const newColor = colorize(EYES_COLORS, eyesColor, wizardEyes);
+    wizard.onEyesChange(newColor);
   };
 
   const colorizeFireball = function () {
@@ -65,6 +73,12 @@
   };
 
   window.colorize = {
+    setCoatChangeHandler(cb) {
+      wizard.onCoatChange = cb;
+    },
+    setEyesChangeHandler(cb) {
+      wizard.onEyesChange = cb;
+    },
     wizardCoatEventAdd,
     wizardCoatEventRemove,
     wizardEyesEventAdd,

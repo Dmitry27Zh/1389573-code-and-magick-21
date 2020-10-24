@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const setup = window.setup.element;
+  const setup = window.dialog.element;
   const dialogHandle = setup.querySelector(`.upload`);
 
   const moveDialog = function (evt) {
