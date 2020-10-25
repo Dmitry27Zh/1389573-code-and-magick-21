@@ -3,6 +3,8 @@
 (function () {
   const setup = window.dialog.element;
 
+  window.activateSimilarWizards();
+
   const deactivateSetup = function () {
     window.setupValidation.userNameInputCheckOff();
     window.colorize.wizardCoatEventRemove();
@@ -17,7 +19,6 @@
     window.colorize.wizardEyesEventAdd();
     window.colorize.fireballEventAdd();
     window.move.moveDialogOn();
-    window.activateSimilarWizards();
   };
 
   const form = setup.querySelector(`.setup-wizard-form`);

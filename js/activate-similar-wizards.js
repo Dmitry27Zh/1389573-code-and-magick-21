@@ -57,15 +57,15 @@
     }));
   };
 
-  window.colorize.setCoatChangeHandler(function (color) {
+  window.colorize.setCoatChangeHandler(window.debaunce(function (color) {
     coatColor = color;
     updateWizards();
-  });
+  }));
 
-  window.colorize.setEyesChangeHandler(function (color) {
+  window.colorize.setEyesChangeHandler(window.debaunce(function (color) {
     eyesColor = color;
     updateWizards();
-  });
+  }));
 
   let wizards = [];
 
