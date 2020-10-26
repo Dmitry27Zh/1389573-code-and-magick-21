@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const DEBAUNCE_INTERVAL = 500;
+  const DEBOUNCE_INTERVAL = 500;
 
   window.debaunce = function (cb) {
     let lastTimeout = null;
@@ -11,7 +11,7 @@
       }
       lastTimeout = window.setTimeout(function () {
         cb(...args);
-      }, DEBAUNCE_INTERVAL);
+      }, DEBOUNCE_INTERVAL);
     };
   };
 })();

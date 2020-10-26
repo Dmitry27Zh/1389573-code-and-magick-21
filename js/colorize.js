@@ -30,8 +30,8 @@
   };
 
   let wizard = {
-    onCoatChange() {},
-    onEyesChange() {},
+    onCoatChange() { },
+    onEyesChange() { },
   };
 
   const colorizeWizardCoat = function () {

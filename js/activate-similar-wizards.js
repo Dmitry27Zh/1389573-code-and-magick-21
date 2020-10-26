@@ -40,21 +40,25 @@
   const namesComparator = function (left, right) {
     if (left > right) {
       return 1;
-    } else if (left < right) {
-      return -1;
-    } else {
-      return 0;
     }
+    if (left < right) {
+      return -1;
+    }
+    return 0;
   };
 
-  const updateWizards = function () {
-    window.render(wizards.sort(function (left, right) {
+  const getUpdatedWizards = function () {
+    return wizards.sort(function (left, right) {
       let rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
         rankDiff = namesComparator(left.name, right.name);
       }
       return rankDiff;
-    }));
+    });
+  };
+
+  const updateWizards = function () {
+    window.render(getUpdatedWizards());
   };
 
   window.colorize.setCoatChangeHandler(window.debaunce(function (color) {
