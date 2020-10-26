@@ -10,7 +10,7 @@
   };
 
   const openPopup = function () {
-    window.setup.element.classList.remove(`hidden`);
+    window.dialog.element.classList.remove(`hidden`);
     setupClose.addEventListener(`click`, setupCloseClickHandler);
     setupClose.addEventListener(`keydown`, setupCloseKeydownHandler);
     setupOpen.removeEventListener(`click`, setupOpenClickHandler);
